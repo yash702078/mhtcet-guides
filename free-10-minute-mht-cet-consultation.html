@@ -132,7 +132,7 @@
 <label><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> Pick a 10-minute slot <small>(IST)</small></label><div id="fc-times" class="fc-times"></div>
 <p id="fc-none" class="fc-note" hidden>No free slot in the next 7 days right now. New slots open regularly, so please check again tomorrow, or message us on WhatsApp: +91 81492 05305.</p>
 </div>
-<div id="fc-wa"><p id="fc-none2" class="fc-note" hidden><b>All online slots for the next few days are taken.</b> Tell us your preferred day and time below and our team will fix your Google Meet on WhatsApp.</p><div class="fc-row">
+<div id="fc-wa"><div id="fc-calbox" hidden style="background:#eef2ff;border:1.5px solid #c7d2fe;border-radius:16px;padding:1rem;margin:.9rem 0"><b style="color:#0f2457">Pick your 10-minute slot on Google Calendar</b><p class="fc-note" style="margin:.3rem 0 .7rem">You get the Google Meet link and a reminder by email automatically.</p><a id="fc-cal2" class="fc-cta" target="_blank" rel="noopener"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="M8.5 15l2 2 4-4"/></svg> See free slots &amp; book</a></div><p id="fc-or" class="fc-note" hidden>Or send your details on WhatsApp and our team will fix a time:</p><p id="fc-none2" class="fc-note" hidden><b>All online slots for the next few days are taken.</b> Tell us your preferred day and time below and our team will fix your Google Meet on WhatsApp.</p><div class="fc-row">
 <div><label for="fc-pdate">Preferred day</label><input id="fc-pdate" name="pdate" type="date"></div>
 <div><label for="fc-ptime">Preferred time</label><select id="fc-ptime" name="ptime"><option>Morning (11 am – 1 pm)</option><option>Afternoon (2 – 5 pm)</option><option>Evening (5 – 8 pm)</option></select></div>
 </div><p class="fc-note">Our team replies on WhatsApp with your exact Google Meet time.</p></div>
@@ -156,20 +156,20 @@
 <p>Before your call, it helps to read: <a href="https://www.mhtcetcounselling.in/guides/mht-cet-percentile-vs-rank.html">percentile vs rank</a> · <a href="https://www.mhtcetcounselling.in/guides/freeze-or-betterment-cap-round.html">freeze or betterment</a> · <a href="https://www.mhtcetcounselling.in/engineering-admission-documents-maharashtra-category-wise.html">documents category-wise</a>.</p>
 <script>
 (function(){
-var C={"script": "https://script.google.com/macros/s/AKfycbzQ_91oz5TUPkY1mvJNRFLdRD-mjblEvgkEtqWYT_K5HAENkwi3bZj_uup8vhbVu3lf/exec", "cal": "", "wa": "918149205305"},f=document.getElementById('fc-form'),msg=document.getElementById('fc-msg'),days=document.getElementById('fc-days'),times=document.getElementById('fc-times'),
+var C={"script": "https://script.google.com/macros/s/AKfycbzQ_91oz5TUPkY1mvJNRFLdRD-mjblEvgkEtqWYT_K5HAENkwi3bZj_uup8vhbVu3lf/exec", "cal": "https://calendar.app.google/24YMKvJFn6Wt56Gv7", "wa": "918149205305"},f=document.getElementById('fc-form'),msg=document.getElementById('fc-msg'),days=document.getElementById('fc-days'),times=document.getElementById('fc-times'),
 pick={date:'',time:''},slots=[],live=!!C.script;
 function el(t,c,h){var e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e}
 function nice(d){var x=new Date(d+'T00:00:00+05:30');return{w:x.toLocaleDateString('en-IN',{weekday:'short',timeZone:'Asia/Kolkata'}),d:x.toLocaleDateString('en-IN',{day:'numeric',month:'short',timeZone:'Asia/Kolkata'})}}
 function t12(t){var h=+t.slice(0,2),m=t.slice(3);return ((h+11)%12+1)+':'+m+(h<12?' am':' pm')}
 function drawDays(){days.innerHTML='';times.innerHTML='';var ds=[];slots.forEach(function(s){if(ds.indexOf(s.date)<0)ds.push(s.date)});
- if(!ds.length){live=false;mode();document.getElementById('fc-none2').hidden=false;return}document.getElementById('fc-none').hidden=true;
+ if(!ds.length){live=false;mode();document.getElementById('fc-none2').hidden=!!C.cal;return}document.getElementById('fc-none').hidden=true;
  ds.forEach(function(d){var n=nice(d),b=el('button','fc-chip',n.w+'<small>'+n.d+'</small>');b.type='button';b.onclick=function(){pick.date=d;pick.time='';[].forEach.call(days.children,function(x){x.classList.remove('on')});b.classList.add('on');drawTimes()};days.appendChild(b)});
  days.children[0].click()}
 function drawTimes(){times.innerHTML='';slots.filter(function(s){return s.date===pick.date}).forEach(function(s){var b=el('button','fc-chip',t12(s.time));b.type='button';b.onclick=function(){pick.time=s.time;[].forEach.call(times.children,function(x){x.classList.remove('on')});b.classList.add('on')};times.appendChild(b)})}
 function load(){fetch(C.script+'?action=slots').then(function(r){return r.json()}).then(function(j){slots=j.slots||[];drawDays()}).catch(function(){live=false;mode()})}
 function mode(){document.getElementById('fc-live').hidden=!live;document.getElementById('fc-wa').hidden=live;document.getElementById('fc-email').required=live;
  var b=document.getElementById('fc-btn-t');b.textContent=live?'Book my free 10-min Google Meet':'Send my request on WhatsApp';
- if(C.cal){var c=document.getElementById('fc-cal');c.hidden=false;c.href=C.cal}
+ if(C.cal){var c=document.getElementById('fc-cal');c.hidden=!live;c.href=C.cal;document.getElementById('fc-calbox').hidden=live;document.getElementById('fc-or').hidden=live;document.getElementById('fc-cal2').href=C.cal}
  if(!live){var t=new Date(Date.now()+864e5),i=document.getElementById('fc-pdate');i.min=t.toISOString().slice(0,10)}}
 mode();if(live)load();
 f.addEventListener('submit',function(e){e.preventDefault();msg.className='fc-msg';msg.textContent='';
