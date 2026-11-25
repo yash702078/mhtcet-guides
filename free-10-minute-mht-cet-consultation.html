@@ -188,6 +188,7 @@ function mode(){document.getElementById('fc-live').hidden=!live;document.getElem
  if(C.cal){var c=document.getElementById('fc-cal');c.hidden=!live;c.href=C.cal;document.getElementById('fc-calbox').hidden=live;document.getElementById('fc-or').hidden=live;document.getElementById('fc-cal2').href=C.cal}
  if(!live){var t=new Date(Date.now()+864e5),i=document.getElementById('fc-pdate');i.min=t.toISOString().slice(0,10)}}
 mode();if(live)load();
+try{var qp=new URLSearchParams(location.search);[['name','fc-name'],['phone','fc-phone'],['email','fc-email'],['pct','fc-pct'],['q','fc-doubt'],['city','fc-city']].forEach(function(m){var x=qp.get(m[0]);if(x)document.getElementById(m[1]).value=x.slice(0,400)})}catch(x){}
 f.addEventListener('submit',function(e){e.preventDefault();msg.className='fc-msg';msg.textContent='';
  var d={};new FormData(f).forEach(function(v,k){d[k]=String(v).trim()});d.page=location.pathname+location.search;
  if(!d.name||!d.doubt){msg.className='fc-msg err';msg.textContent='Please write your name and what you need guidance on.';return}
