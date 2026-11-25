@@ -88,6 +88,21 @@
 .fc-t p{margin:0 0 .7rem;font-size:.93rem}.fc-t .p{display:flex;gap:.7rem;align-items:center}.fc-t img{width:48px;height:48px;border-radius:50%;object-fit:cover}.fc-t b{display:block;color:var(--navy);font-size:.9rem}.fc-t span{font-size:.76rem;color:var(--muted)}
 .fc-awards{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin:.4rem 0 1.2rem}.fc-awards figure{margin:0;background:#fff;border:1px solid var(--border);border-radius:14px;overflow:hidden}.fc-awards img{width:100%;height:130px;object-fit:cover;display:block}.fc-awards figcaption{font-size:.76rem;font-weight:700;color:var(--navy);padding:.45rem .55rem}
 @media(min-width:720px){.fc-hero{grid-template-columns:1.4fr 1fr;padding:1.8rem}.fc-grid{grid-template-columns:1fr 1fr}.fc-row{grid-template-columns:1fr 1fr}.fc-proof{grid-template-columns:1fr 1fr}.fc-awards{grid-template-columns:repeat(3,1fr)}}
+.fc-chip{transition:transform .18s ease,box-shadow .18s ease,background .18s,border-color .18s;animation:fcIn .35s ease both}
+.fc-chip:not(.bk):hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(39,72,216,.15);border-color:var(--blue)}
+.fc-chip.on{animation:fcPop .28s ease both}
+.fc-chip.low .lf{color:#c2410c}.fc-chip.low.on .lf{color:#ffd9b0}
+.fc-chip.bk{animation:fcIn .35s ease both}.fc-chip.rs small{color:#9a3412!important}
+.fc-live{display:inline-flex;align-items:center;gap:.35rem;margin-left:.4rem;font-size:.72rem;font-weight:700;color:#0f9d6b;background:#ecfdf5;border-radius:100px;padding:.15rem .55rem;vertical-align:middle}
+.fc-live i{width:7px;height:7px;border-radius:50%;background:#0f9d6b;box-shadow:0 0 0 0 rgba(15,157,107,.6);animation:fcPulse 1.6s infinite}
+.fc-sk{display:inline-block;width:92px;height:52px;border-radius:12px;background:linear-gradient(90deg,#eef1f8 25%,#f8f9fc 50%,#eef1f8 75%);background-size:200% 100%;animation:fcSh 1.1s infinite linear;flex-shrink:0}
+#fc-social{animation:fcIn .5s ease both}
+.fc-submit{transition:transform .15s,box-shadow .15s}.fc-submit:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(15,157,107,.25)}
+@keyframes fcIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes fcPop{0%{transform:scale(.94)}60%{transform:scale(1.05)}100%{transform:scale(1)}}
+@keyframes fcPulse{0%{box-shadow:0 0 0 0 rgba(15,157,107,.55)}70%{box-shadow:0 0 0 7px rgba(15,157,107,0)}100%{box-shadow:0 0 0 0 rgba(15,157,107,0)}}
+@keyframes fcSh{to{background-position:-200% 0}}
+@media (prefers-reduced-motion:reduce){.fc-chip,.fc-chip.on,.fc-live i,.fc-sk,#fc-social{animation:none!important;transition:none!important}}
 </style>
 <div class="fc-hero"><div>
 <div class="fc-pills"><span><svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> 10 minutes</span><span><svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12l-8 8-9-9V3h8z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg> Free</span><span><svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="13" height="12" rx="3"/><path d="M16 10l5-3v10l-5-3z"/></svg> Google Meet</span></div>
@@ -129,7 +144,7 @@
 
 <div id="fc-live" hidden>
 <p id="fc-social" class="fc-note" hidden style="font-weight:700;color:#9a3412;background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;padding:.5rem .7rem"></p>
-<label><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="M8.5 15l2 2 4-4"/></svg> Pick a day</label><div id="fc-days" class="fc-days"></div>
+<label><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="M8.5 15l2 2 4-4"/></svg> Pick a day <span class="fc-live"><i></i>Live availability</span></label><div id="fc-days" class="fc-days"></div>
 <label><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> Pick a 10-minute slot <small>(IST)</small></label><div id="fc-times" class="fc-times"></div>
 <p id="fc-none" class="fc-note" hidden>No free slot in the next 7 days right now. New slots open regularly, so please check again tomorrow, or message us on WhatsApp: +91 81492 05305.</p>
 </div>
@@ -158,16 +173,16 @@
 <script>
 (function(){
 var C={"script": "https://script.google.com/macros/s/AKfycbzQ_91oz5TUPkY1mvJNRFLdRD-mjblEvgkEtqWYT_K5HAENkwi3bZj_uup8vhbVu3lf/exec", "cal": "https://calendar.app.google/24YMKvJFn6Wt56Gv7", "wa": "918149205305"},f=document.getElementById('fc-form'),msg=document.getElementById('fc-msg'),days=document.getElementById('fc-days'),times=document.getElementById('fc-times'),
-pick={date:'',time:''},slots=[],booked=[],live=!!C.script;
+pick={date:'',time:''},slots=[],booked=[],reserved=[],live=!!C.script;
 function el(t,c,h){var e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e}
 function nice(d){var x=new Date(d+'T00:00:00+05:30');return{w:x.toLocaleDateString('en-IN',{weekday:'short',timeZone:'Asia/Kolkata'}),d:x.toLocaleDateString('en-IN',{day:'numeric',month:'short',timeZone:'Asia/Kolkata'})}}
 function t12(t){var h=+t.slice(0,2),m=t.slice(3);return ((h+11)%12+1)+':'+m+(h<12?' am':' pm')}
 function drawDays(){days.innerHTML='';times.innerHTML='';var ds=[];slots.forEach(function(s){if(ds.indexOf(s.date)<0)ds.push(s.date)});
  if(!ds.length){live=false;mode();document.getElementById('fc-none2').hidden=!!C.cal;return}document.getElementById('fc-none').hidden=true;
- ds.forEach(function(d){var n=nice(d),left=slots.filter(function(s){return s.date===d}).length,b=el('button','fc-chip',n.w+'<small>'+n.d+' · '+left+' left</small>');b.type='button';b.onclick=function(){pick.date=d;pick.time='';[].forEach.call(days.children,function(x){x.classList.remove('on')});b.classList.add('on');drawTimes()};days.appendChild(b)});
- days.children[0].click()}
-function drawTimes(){times.innerHTML='';slots.map(function(s){return{date:s.date,time:s.time,b:0}}).concat(booked.map(function(s){return{date:s.date,time:s.time,b:1}})).filter(function(s){return s.date===pick.date}).sort(function(a,b){return a.time<b.time?-1:1}).forEach(function(s){if(s.b){var x=el('span','fc-chip bk','<s>'+t12(s.time)+'</s><small>Booked</small>');x.setAttribute('aria-disabled','true');times.appendChild(x);return}var b=el('button','fc-chip',t12(s.time)+'<small>Available</small>');b.type='button';b.onclick=function(){pick.time=s.time;[].forEach.call(times.children,function(x){x.classList.remove('on')});b.classList.add('on')};times.appendChild(b)})}
-function load(){fetch(C.script+'?action=slots').then(function(r){return r.json()}).then(function(j){slots=j.slots||[];booked=j.booked||[];var w=+j.bookedThisWeek||0,sp=document.getElementById('fc-social');if(w>=3){sp.textContent='🔥 '+w+' students booked a guidance call in the last 7 days';sp.hidden=false}drawDays()}).catch(function(){live=false;mode()})}
+ ds.forEach(function(d){var n=nice(d),left=slots.filter(function(s){return s.date===d}).length,b=el('button','fc-chip'+(left<=3?' low':''),n.w+'<small>'+n.d+' · <b class="lf">'+left+' left</b></small>');b.type='button';b.onclick=function(){pick.date=d;pick.time='';[].forEach.call(days.children,function(x){x.classList.remove('on')});b.classList.add('on');drawTimes()};days.appendChild(b)});
+ [].forEach.call(days.children,function(x,i){x.style.animationDelay=(i*45)+'ms'});days.children[0].click()}
+function drawTimes(){times.innerHTML='';setTimeout(function(){[].forEach.call(times.children,function(x,i){x.style.animationDelay=(i*35)+'ms'})},0);slots.map(function(s){return{date:s.date,time:s.time,b:0}}).concat(booked.map(function(s){return{date:s.date,time:s.time,b:1}})).concat(reserved.map(function(s){return{date:s.date,time:s.time,b:2}})).filter(function(s){return s.date===pick.date}).sort(function(a,b){return a.time<b.time?-1:1}).forEach(function(s){if(s.b){var x=el('span','fc-chip bk'+(s.b==2?' rs':''),'<s>'+t12(s.time)+'</s><small>'+(s.b==2?'Reserved':'Booked')+'</small>');x.setAttribute('aria-disabled','true');times.appendChild(x);return}var b=el('button','fc-chip',t12(s.time)+'<small>Available</small>');b.type='button';b.onclick=function(){pick.time=s.time;[].forEach.call(times.children,function(x){x.classList.remove('on')});b.classList.add('on')};times.appendChild(b)})}
+function load(){days.innerHTML='<span class="fc-sk"></span><span class="fc-sk"></span><span class="fc-sk"></span>';fetch(C.script+'?action=slots').then(function(r){return r.json()}).then(function(j){slots=j.slots||[];booked=j.booked||[];reserved=j.reserved||[];var w=+j.bookedThisWeek||0,sp=document.getElementById('fc-social');if(w>=3){sp.textContent='🔥 '+w+' students booked a guidance call in the last 7 days';sp.hidden=false}drawDays()}).catch(function(){live=false;mode()})}
 function mode(){document.getElementById('fc-live').hidden=!live;document.getElementById('fc-wa').hidden=live;document.getElementById('fc-email').required=live;
  var b=document.getElementById('fc-btn-t');b.textContent=live?'Book my free 10-min Google Meet':'Send my request on WhatsApp';
  if(C.cal){var c=document.getElementById('fc-cal');c.hidden=!live;c.href=C.cal;document.getElementById('fc-calbox').hidden=live;document.getElementById('fc-or').hidden=live;document.getElementById('fc-cal2').href=C.cal}
