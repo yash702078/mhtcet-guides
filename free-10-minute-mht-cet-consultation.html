@@ -132,7 +132,7 @@
 <label><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> Pick a 10-minute slot <small>(IST)</small></label><div id="fc-times" class="fc-times"></div>
 <p id="fc-none" class="fc-note" hidden>No free slot in the next 7 days right now. New slots open regularly, so please check again tomorrow, or message us on WhatsApp: +91 81492 05305.</p>
 </div>
-<div id="fc-wa"><div class="fc-row">
+<div id="fc-wa"><p id="fc-none2" class="fc-note" hidden><b>All online slots for the next few days are taken.</b> Tell us your preferred day and time below and our team will fix your Google Meet on WhatsApp.</p><div class="fc-row">
 <div><label for="fc-pdate">Preferred day</label><input id="fc-pdate" name="pdate" type="date"></div>
 <div><label for="fc-ptime">Preferred time</label><select id="fc-ptime" name="ptime"><option>Morning (11 am – 1 pm)</option><option>Afternoon (2 – 5 pm)</option><option>Evening (5 – 8 pm)</option></select></div>
 </div><p class="fc-note">Our team replies on WhatsApp with your exact Google Meet time.</p></div>
@@ -162,7 +162,7 @@ function el(t,c,h){var e=document.createElement(t);if(c)e.className=c;if(h!=null
 function nice(d){var x=new Date(d+'T00:00:00+05:30');return{w:x.toLocaleDateString('en-IN',{weekday:'short',timeZone:'Asia/Kolkata'}),d:x.toLocaleDateString('en-IN',{day:'numeric',month:'short',timeZone:'Asia/Kolkata'})}}
 function t12(t){var h=+t.slice(0,2),m=t.slice(3);return ((h+11)%12+1)+':'+m+(h<12?' am':' pm')}
 function drawDays(){days.innerHTML='';times.innerHTML='';var ds=[];slots.forEach(function(s){if(ds.indexOf(s.date)<0)ds.push(s.date)});
- if(!ds.length){document.getElementById('fc-none').hidden=false;return}document.getElementById('fc-none').hidden=true;
+ if(!ds.length){live=false;mode();document.getElementById('fc-none2').hidden=false;return}document.getElementById('fc-none').hidden=true;
  ds.forEach(function(d){var n=nice(d),b=el('button','fc-chip',n.w+'<small>'+n.d+'</small>');b.type='button';b.onclick=function(){pick.date=d;pick.time='';[].forEach.call(days.children,function(x){x.classList.remove('on')});b.classList.add('on');drawTimes()};days.appendChild(b)});
  days.children[0].click()}
 function drawTimes(){times.innerHTML='';slots.filter(function(s){return s.date===pick.date}).forEach(function(s){var b=el('button','fc-chip',t12(s.time));b.type='button';b.onclick=function(){pick.time=s.time;[].forEach.call(times.children,function(x){x.classList.remove('on')});b.classList.add('on')};times.appendChild(b)})}
