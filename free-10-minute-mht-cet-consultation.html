@@ -79,7 +79,7 @@
 .fc-seg input{position:absolute;opacity:0;width:1px;height:1px}.fc-seg input:checked+span{color:var(--blue)}.fc-seg label:has(input:checked){border-color:var(--blue);background:#eef2ff}
 .fc-days,.fc-times{display:flex;gap:.45rem;overflow-x:auto;padding:.2rem 0 .5rem;-webkit-overflow-scrolling:touch}.fc-times{flex-wrap:wrap;overflow:visible}
 .fc-chip{border:1.5px solid #d5dcef;background:#fff;border-radius:12px;padding:.5rem .7rem;font:inherit;font-size:.86rem;font-weight:700;color:var(--navy);cursor:pointer;white-space:nowrap}.fc-chip small{display:block;font-weight:600;color:var(--muted);font-size:.72rem}
-.fc-chip.on{background:var(--blue);border-color:var(--blue);color:#fff}.fc-chip.on small{color:#dfe7ff}
+.fc-chip.on{background:var(--blue);border-color:var(--blue);color:#fff}.fc-chip.bk{background:#f1f3f8;border-color:#e3e7f0;color:#9aa3b8;cursor:not-allowed}.fc-chip.bk small{display:block;color:#b42318}.fc-chip.on small{color:#dfe7ff}
 .fc-note{font-size:.82rem;color:var(--muted);margin:.3rem 0}.fc-consent{display:flex;gap:.55rem;align-items:flex-start;font-weight:500!important;font-size:.85rem!important}.fc-consent input{width:18px;height:18px;margin-top:.15rem;flex-shrink:0}
 .fc-submit{width:100%;margin-top:1rem;border:0;border-radius:14px;padding:.95rem;font:inherit;font-weight:800;font-size:1rem;background:#0f9d6b;color:#fff;cursor:pointer;display:flex;gap:.5rem;align-items:center;justify-content:center}.fc-submit[disabled]{opacity:.6}
 .fc-msg{margin-top:.8rem;font-weight:700}.fc-msg.err{color:#b42318}.fc-ok{background:#ecfdf5;border:1.5px solid #0f9d6b;border-radius:16px;padding:1rem;color:#065f46}
@@ -128,6 +128,7 @@
 <textarea id="fc-doubt" name="doubt" rows="3" required maxlength="400" placeholder="e.g. I expect around 96 percentile, OBC, Pune. Which colleges and branches should I aim for?"></textarea>
 
 <div id="fc-live" hidden>
+<p id="fc-social" class="fc-note" hidden style="font-weight:700;color:#9a3412;background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;padding:.5rem .7rem"></p>
 <label><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="M8.5 15l2 2 4-4"/></svg> Pick a day</label><div id="fc-days" class="fc-days"></div>
 <label><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> Pick a 10-minute slot <small>(IST)</small></label><div id="fc-times" class="fc-times"></div>
 <p id="fc-none" class="fc-note" hidden>No free slot in the next 7 days right now. New slots open regularly, so please check again tomorrow, or message us on WhatsApp: +91 81492 05305.</p>
@@ -157,16 +158,16 @@
 <script>
 (function(){
 var C={"script": "https://script.google.com/macros/s/AKfycbzQ_91oz5TUPkY1mvJNRFLdRD-mjblEvgkEtqWYT_K5HAENkwi3bZj_uup8vhbVu3lf/exec", "cal": "https://calendar.app.google/24YMKvJFn6Wt56Gv7", "wa": "918149205305"},f=document.getElementById('fc-form'),msg=document.getElementById('fc-msg'),days=document.getElementById('fc-days'),times=document.getElementById('fc-times'),
-pick={date:'',time:''},slots=[],live=!!C.script;
+pick={date:'',time:''},slots=[],booked=[],live=!!C.script;
 function el(t,c,h){var e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e}
 function nice(d){var x=new Date(d+'T00:00:00+05:30');return{w:x.toLocaleDateString('en-IN',{weekday:'short',timeZone:'Asia/Kolkata'}),d:x.toLocaleDateString('en-IN',{day:'numeric',month:'short',timeZone:'Asia/Kolkata'})}}
 function t12(t){var h=+t.slice(0,2),m=t.slice(3);return ((h+11)%12+1)+':'+m+(h<12?' am':' pm')}
 function drawDays(){days.innerHTML='';times.innerHTML='';var ds=[];slots.forEach(function(s){if(ds.indexOf(s.date)<0)ds.push(s.date)});
  if(!ds.length){live=false;mode();document.getElementById('fc-none2').hidden=!!C.cal;return}document.getElementById('fc-none').hidden=true;
- ds.forEach(function(d){var n=nice(d),b=el('button','fc-chip',n.w+'<small>'+n.d+'</small>');b.type='button';b.onclick=function(){pick.date=d;pick.time='';[].forEach.call(days.children,function(x){x.classList.remove('on')});b.classList.add('on');drawTimes()};days.appendChild(b)});
+ ds.forEach(function(d){var n=nice(d),left=slots.filter(function(s){return s.date===d}).length,b=el('button','fc-chip',n.w+'<small>'+n.d+' · '+left+' left</small>');b.type='button';b.onclick=function(){pick.date=d;pick.time='';[].forEach.call(days.children,function(x){x.classList.remove('on')});b.classList.add('on');drawTimes()};days.appendChild(b)});
  days.children[0].click()}
-function drawTimes(){times.innerHTML='';slots.filter(function(s){return s.date===pick.date}).forEach(function(s){var b=el('button','fc-chip',t12(s.time));b.type='button';b.onclick=function(){pick.time=s.time;[].forEach.call(times.children,function(x){x.classList.remove('on')});b.classList.add('on')};times.appendChild(b)})}
-function load(){fetch(C.script+'?action=slots').then(function(r){return r.json()}).then(function(j){slots=j.slots||[];drawDays()}).catch(function(){live=false;mode()})}
+function drawTimes(){times.innerHTML='';slots.map(function(s){return{date:s.date,time:s.time,b:0}}).concat(booked.map(function(s){return{date:s.date,time:s.time,b:1}})).filter(function(s){return s.date===pick.date}).sort(function(a,b){return a.time<b.time?-1:1}).forEach(function(s){if(s.b){var x=el('span','fc-chip bk','<s>'+t12(s.time)+'</s><small>Booked</small>');x.setAttribute('aria-disabled','true');times.appendChild(x);return}var b=el('button','fc-chip',t12(s.time)+'<small>Available</small>');b.type='button';b.onclick=function(){pick.time=s.time;[].forEach.call(times.children,function(x){x.classList.remove('on')});b.classList.add('on')};times.appendChild(b)})}
+function load(){fetch(C.script+'?action=slots').then(function(r){return r.json()}).then(function(j){slots=j.slots||[];booked=j.booked||[];var w=+j.bookedThisWeek||0,sp=document.getElementById('fc-social');if(w>=3){sp.textContent='🔥 '+w+' students booked a guidance call in the last 7 days';sp.hidden=false}drawDays()}).catch(function(){live=false;mode()})}
 function mode(){document.getElementById('fc-live').hidden=!live;document.getElementById('fc-wa').hidden=live;document.getElementById('fc-email').required=live;
  var b=document.getElementById('fc-btn-t');b.textContent=live?'Book my free 10-min Google Meet':'Send my request on WhatsApp';
  if(C.cal){var c=document.getElementById('fc-cal');c.hidden=!live;c.href=C.cal;document.getElementById('fc-calbox').hidden=live;document.getElementById('fc-or').hidden=live;document.getElementById('fc-cal2').href=C.cal}
