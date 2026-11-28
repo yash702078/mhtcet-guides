@@ -1,0 +1,37 @@
+# Upload /guides/ to MilesWeb (public_html/guides) on every push to main.
+# Needs 3 repository secrets (Settings -> Secrets and variables -> Actions):
+#   MW_FTP_SERVER   FTP host from MilesWeb (e.g. the server IP 45.199.139.30)
+#   MW_FTP_USERNAME an FTP account whose home folder is public_html/guides
+#   MW_FTP_PASSWORD its password
+# Never put these values in a file or in chat. Until they are set, the job skips.
+name: Deploy guides to MilesWeb
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+concurrency: deploy-milesweb
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check secrets
+        id: chk
+        env:
+          S: ${{ secrets.MW_FTP_SERVER }}
+        run: |
+          if [ -z "$S" ]; then echo "MilesWeb FTP secrets not set yet - skipping."; echo "ok=false" >> $GITHUB_OUTPUT; else echo "ok=true" >> $GITHUB_OUTPUT; fi
+      - uses: actions/checkout@v4
+        if: steps.chk.outputs.ok == 'true'
+      - name: Upload to MilesWeb
+        if: steps.chk.outputs.ok == 'true'
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.MW_FTP_SERVER }}
+          username: ${{ secrets.MW_FTP_USERNAME }}
+          password: ${{ secrets.MW_FTP_PASSWORD }}
+          server-dir: ./
+          exclude: |
+            **/.git*
+            **/.git*/**
+            .github/**
+            README.md
